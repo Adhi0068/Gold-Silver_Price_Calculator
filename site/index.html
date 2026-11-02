@@ -3,545 +3,117 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Silver Price Calculator</title>
-
-  <style>
-
-    /* ================= THEME ================= */
-     :root {
-      --bg: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.06) 0%, transparent 45%),
-  radial-gradient(circle at 75% 75%, rgba(255,255,255,0.04) 0%, transparent 45%),
-  linear-gradient(135deg,#2f3a46,#0f172a);
-        --card: rgba(255,255,255,0.06);
-        --panel: rgba(255,255,255,0.04);
-        --border: rgba(255,255,255,0.10);
-        --text: #ffffff;
-        --pill-bg: rgba(255,255,255,0.12);
-        --btn-gradient: linear-gradient(135deg,#8b5cf6,#6366f1);
-        --btn-hover: linear-gradient(135deg,#7c3aed,#4f46e5);
-        --accent-glow: #8b5cf6;
-    }
-
-    body.dark {
-        --bg: linear-gradient(135deg,#000000,#050505);
-        --card: rgba(255,255,255,0.04);
-        --panel: rgba(255,255,255,0.03);
-        --border: rgba(255,255,255,0.08);
-        --text: #e5e7eb;
-        --pill-bg: rgba(255,255,255,0.08);
-        --btn-gradient: linear-gradient(135deg,#3b82f6,#2563eb);
-        --btn-hover: linear-gradient(135deg,#2563eb,#1d4ed8);
-        --accent-glow: rgba(59,130,246,0.6);
-    }
-
-  body.light {
-        --bg: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.35) 0%, transparent 45%),
-          radial-gradient(circle at 80% 80%, rgba(255,255,255,0.15) 0%, transparent 50%),
-          linear-gradient(135deg,#c7c9cc,#9ea3a8);
-        --card: rgba(255,255,255,0.18);
-        --panel: rgba(255,255,255,0.22);
-        --text: #1e293b;
-        --border: rgba(255,255,255,0.5);
-        --pill-bg: rgba(255,255,255,0.35);
-        --btn-gradient: linear-gradient(135deg,#6366f1,#8b5cf6);
-        --btn-hover: linear-gradient(135deg,#4f46e5,#7c3aed);
-        --accent-glow: rgba(139,92,246,0.55);
-    }
-
-    /* ================= BODY ================= */
-    html,body{height:100%}
-
-    body{
-        margin:0;
-        font-family:'Segoe UI',sans-serif;
-        background:var(--bg);
-        color:var(--text);
-
-        display:flex;
-        justify-content:center;
-        align-items:flex-start;
-
-        padding:
-            calc(env(safe-area-inset-top) + 24px)
-            16px
-            calc(env(safe-area-inset-bottom) + 90px)
-            16px;
-
-        box-sizing:border-box;
-    }
-
-    .wrapper{
-        width:100%;
-        max-width:480px;
-    }
-
-    /* ================= TITLE CARD ================= */
-    .top-bar{
-        padding:18px 20px;
-        border-radius:24px;
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        background: linear-gradient(
-            145deg,
-            rgba(255,255,255,0.35),
-            rgba(255,255,255,0.15)
-        );
-        border: 1px solid rgba(255,255,255,0.4);
-        box-shadow:
-            0 8px 20px rgba(0,0,0,0.12),
-            inset 0 1px 1px rgba(255,255,255,0.3);
-    }
-
-    .top-bar h2{
-        margin:0;
-        font-size:20px;
-        font-weight:700;
-    }
-    .title-wrapper{
-        text-align:center;
-    }
-
-    .title-wrapper h2{
-        margin:0;
-        font-size:20px;
-        font-weight:700;
-    }
-
-    .subtitle{
-        margin-top:4px;
-        font-size:13px;
-        opacity:0.7;
-        font-weight:500;
-    }
-
-    .mode-switch{
-        position:absolute;
-        right:18px;
-        top:50%;
-        transform:translateY(-50%);
-        width:40px;     /* smaller */
-        height:22px;    /* smaller */
-        border-radius:20px;
-        background:var(--panel);
-        border:1px solid var(--border);
-        cursor:pointer;
-    }
-
-    .mode-switch::after{
-        content:"";
-        position:absolute;
-        width:14px;
-        height:14px;
-        border-radius:50%;
-        background:var(--btn-gradient);
-        top:3px;
-        left:5px;
-        transition:.3s ease;
-    }
-
-    body.dark .mode-switch::after{ transform:translateX(16px); }
-    body.light .mode-switch::after{ transform:translateX(8px); }
-
-    /* ================= MAIN CARD ================= */
-    .card{
-        position: relative;
-        overflow: hidden;
-        margin-top:22px;
-        padding:32px;
-        border-radius:28px;
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        background: linear-gradient(
-            145deg,
-            rgba(255,255,255,0.35),
-            rgba(255,255,255,0.15)
-        );
-        border: 1px solid rgba(255,255,255,0.4);
-        box-shadow:
-            0 10px 30px rgba(0,0,0,0.15),
-            inset 0 1px 1px rgba(255,255,255,0.6);
-    }
-
-    body.light .card,
-    body.light .top-bar{
-        backdrop-filter: blur(30px);
-    }
-   body.light .row input{
-         background: rgba(255,255,255,0.03);
-        color: #1f2937;
-    }
-
-   body.light .card::before,
-        body.light .top-bar::before{
-            content:"";
-            position:absolute;
-            inset:0;
-            border-radius:inherit;
-            background: radial-gradient(
-                circle at 30% 10%,
-                rgba(255,255,255,0.18) 0%,
-                rgba(255,255,255,0.08) 30%,
-                transparent 60%
-            );
-            pointer-events:none;
-        }
-
-    /* ================= PRICE ================= */
-    .current-price-box{
-        text-align:center;
-        margin-bottom:28px;
-    }
-
-    .current-price-box .label{
-        font-size:15px;
-        opacity:.8;
-    }
-
-    .current-price-box .price{
-        font-size:36px;
-        font-weight:800;
-        margin-top:10px;
-        transition:.3s ease;
-    }
-
-    .price.pulse{
-        transform:scale(1.06);
-    }
-
-    .tag{
-        margin-top:14px;
-        display:inline-flex;
-        align-items:center;
-        gap:8px;
-        padding:8px 16px;
-        border-radius:999px;
-        font-size:13px;
-        background:var(--pill-bg);
-        border:1px solid var(--border);
-        transition:.3s ease;
-    }
-
-    .tag svg{
-        width:14px;
-        height:14px;
-    }
-
-    .tag.glow{
-        box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    /* ================= FORM ================= */
-    label{
-        font-size:15px;
-        margin-top:18px;
-        display:block;
-    }
-
-    .row{
-        margin-top:8px;
-        position:relative;
-    }
-
-    .row input{
-        width:100%;
-        padding:16px 130px 16px 16px;
-        border-radius:20px;
-        border:1px solid rgba(255,255,255,0.4);
-        background: rgba(255,255,255,0.012);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        color:var(--text);
-        font-weight: 500;
-        font-size:16px;
-        outline:none;
-        box-sizing:border-box;
-    }
-
-<!--        .row input:focus{-->
-<!--            border: 1.5px solid var(&#45;&#45;accent-glow);-->
-<!--            box-shadow:-->
-<!--                0 0 0 2px color-mix(in srgb, var(&#45;&#45;accent-glow) 45%, transparent);-->
-<!--        }-->
-
-<!--        .row input:focus{-->
-<!--            border: 2px solid color-mix(in srgb, var(&#45;&#45;accent-glow) 90%, black);-->
-<!--            box-shadow:-->
-<!--                0 0 0 3px color-mix(in srgb, var(&#45;&#45;accent-glow) 40%, transparent);-->
-<!--        }-->
-
-    .row input:focus{
-        border: 1px solid var(--accent-glow);
-        box-shadow:
-            0 0 0 3px color-mix(in srgb, var(--accent-glow) 35%, transparent);
-    }
-
-    .row button{
-        position:absolute;
-        right:6px;
-        top:6px;
-        bottom:6px;
-        width:110px;
-        border:none;
-        border-radius:16px;
-        background:var(--btn-gradient);
-        color:white;
-        font-weight:600;
-        cursor:pointer;
-        transition:.2s ease;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-
-    .row button:disabled{
-        opacity:.6;
-        cursor:not-allowed;
-    }
-
-    .row button:hover{
-        background:var(--btn-hover);
-        transform: translateY(-1px);
-    }
-
-    .helper-note{font-size:12px;line-height:1.5;opacity:.72;margin:8px 2px 0;}
-
-    /* ================= RESULT ================= */
-    .result{
-        margin-top:24px;
-        padding:22px;
-        border-radius:22px;
-        background:var(--panel);
-        display:none;
-    }
-
-    .breakdown-row{
-        display:flex;
-        justify-content:space-between;
-        font-size:15px;
-        margin-top:8px;
-    }
-
-    .summary{
-        margin-top:18px;
-        padding-top:14px;
-        border-top:1px solid var(--border);
-        text-align:center;
-    }
-
-    .summary .amount{
-        font-size:24px;
-        font-weight:800;
-        margin-top:6px;
-    }
-
-  </style>
+  <title>Metal Price Calculator</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div class="wrapper">
 
+  <!-- TOP BAR -->
   <div class="top-bar">
-    <div class="title-wrapper">
-      <h2>Silver Price Calculator  </h2>
-      <!--            <div class="subtitle">Calculator</div>-->
-    </div>
+    <div class="top-title" id="topMetalTitle">Silver</div>
     <div class="mode-switch" onclick="toggleTheme()"></div>
   </div>
 
+  <!-- MAIN CARD -->
   <div class="card">
 
     <div class="current-price-box">
-      <div class="label">Currently Set Silver Price</div>
+      <div class="label" id="priceLabel">Currently Set Silver Price</div>
       <div class="price" id="currentPriceText">₹ -- / gram</div>
 
       <div class="tag" id="lastUpdatedTag" style="display:none">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 8v4l3 3"/>
-          <circle cx="12" cy="12" r="10"/>
-        </svg>
         <span id="updatedText"></span>
       </div>
     </div>
 
-    <label>Update Silver Price</label>
-    <div class="row">
-      <input id="silverPrice" type="number" min="0" step="0.01"
-             oninput="sanitizeInput(this)">
-      <button id="updateBtn" onclick="updatePrice()">Update</button>
-    </div>
-    <p class="helper-note">Your updated price is saved only in this browser on this device.</p>
-    <p id="statusMessage" class="helper-note" role="status" aria-live="polite"></p>
+    <!-- UPDATE SECTION -->
+    <label id="updateLabel">Update Silver Price</label>
 
+    <!-- SILVER -->
+    <div class="row" id="silverPriceRow">
+      <input id="silverPriceInput"
+             type="number"
+             placeholder="Price"
+             min="0"
+             step="0.01"
+             oninput="sanitizeInput(this)">
+      <button onclick="updatePriceOnly()">Update</button>
+    </div>
+
+    <!-- GOLD -->
+    <div class="gold-grid" id="goldGrid">
+
+      <div class="gold-column">
+        <label>Update Price</label>
+        <div class="gold-box">
+            <input id="goldPriceInput"
+                  type="number"
+                  placeholder="Price"
+                  min="0"
+                  step="0.01">
+            <button onclick="updateGoldPrice()">Update</button>
+        </div>
+      </div>
+
+      <div class="gold-column">
+        <label>Update Rate %</label>
+        <div class="gold-box">
+            <input id="goldRateInput"
+                  type="number"
+                  placeholder="Rate %"
+                  min="0"
+                  step="0.01">
+            <button onclick="updateGoldRate()">Update</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- WEIGHT (NOW INSIDE CARD PROPERLY) -->
     <label>Weight (grams)</label>
     <div class="row">
-      <input id="weight" type="number" min="0" step="0.01"
+      <input id="weight"
+             type="number"
+             min="0"
+             step="0.01"
              oninput="sanitizeInput(this); autoCalculate()">
       <button onclick="calculate()">Calculate</button>
     </div>
 
+    <!-- RESULT -->
     <div class="result" id="result">
       <div id="totalText"></div>
+
       <div class="breakdown-row">
-        <span>Base Silver Price</span>
+        <span id="baseLabel">Base Price</span>
         <span>₹ <span id="basePrice"></span></span>
       </div>
+
       <div class="breakdown-row">
-        <span>Making Charges</span>
+        <span id="makingLabel">Making Charges</span>
         <span>₹ <span id="makingCharge"></span></span>
       </div>
+
       <div class="summary">
         FINAL PAYABLE AMOUNT
         <div class="amount">₹ <span id="finalAmount"></span></div>
       </div>
     </div>
 
-  </div>
+  </div> <!-- CARD CLOSED HERE (correct place) -->
+
 </div>
 
-<script>
-  const DEFAULT_PRICE = 200;
-  const DEFAULT_UPDATED = "2026-03-02T02:36:58.867";
-  const PRICE_KEY = "silverCalculator.price";
-  const UPDATED_KEY = "silverCalculator.lastUpdated";
-  const modes = ["purple", "dark", "light"];
-  let modeIndex = 0;
-  const $ = (id) => document.getElementById(id);
+<!-- METAL SWITCH -->
+<div class="metal-switch">
+  <div class="metal-option" onclick="switchMetal('silver')">Silver</div>
+  <div class="metal-option" onclick="switchMetal('gold')">Gold</div>
+  <div class="metal-slider"></div>
+</div>
 
-  function formatINR(value) {
-    return new Intl.NumberFormat("en-IN", {
-      minimumFractionDigits: Number(value) % 1 !== 0 ? 2 : 0,
-      maximumFractionDigits: 2
-    }).format(Number(value));
-  }
-  function applyTheme(mode) {
-    document.body.classList.remove("dark", "light");
-    if (mode === "dark") document.body.classList.add("dark");
-    if (mode === "light") document.body.classList.add("light");
-    try { localStorage.setItem("silverCalculator.theme", mode); } catch (_) {}
-  }
-  function loadTheme() {
-    let saved = "purple";
-    try { saved = localStorage.getItem("silverCalculator.theme") || "purple"; } catch (_) {}
-    modeIndex = modes.indexOf(saved);
-    if (modeIndex < 0) modeIndex = 0;
-    applyTheme(saved);
-  }
-  function toggleTheme() {
-    modeIndex = (modeIndex + 1) % modes.length;
-    applyTheme(modes[modeIndex]);
-  }
-  function sanitizeInput(input) {
-    if (Number(input.value) < 0) input.value = "";
-  }
-  function showStatus(message, isError = false) {
-    const status = $("statusMessage");
-    if (!status) return;
-    status.textContent = message;
-    status.style.color = isError ? "#ffb4b4" : "var(--text)";
-  }
-  function displayPrice(price, updatedAt) {
-    $("currentPriceText").textContent = "₹ " + formatINR(price) + " / gram";
-    if (updatedAt) {
-      const date = new Date(updatedAt);
-      if (!Number.isNaN(date.getTime())) {
-        $("updatedText").textContent = "Updated on " +
-          date.toLocaleDateString("en-IN") + " at " +
-          date.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
-        $("lastUpdatedTag").style.display = "inline-flex";
-      }
-    }
-  }
-  function loadPrice() {
-    let price = DEFAULT_PRICE;
-    let updatedAt = DEFAULT_UPDATED;
-    try {
-      const savedPrice = Number(localStorage.getItem(PRICE_KEY));
-      const savedDate = localStorage.getItem(UPDATED_KEY);
-      if (savedPrice > 0) price = savedPrice;
-      if (savedDate) updatedAt = savedDate;
-    } catch (_) {}
-    displayPrice(price, updatedAt);
-  }
-  function updatePrice() {
-    const price = Number($("silverPrice").value);
-    if (!Number.isFinite(price) || price <= 0) {
-      showStatus("Enter a silver price greater than zero.", true);
-      return;
-    }
-    const updatedAt = new Date().toISOString();
-    try {
-      localStorage.setItem(PRICE_KEY, String(price));
-      localStorage.setItem(UPDATED_KEY, updatedAt);
-    } catch (_) {
-      showStatus("Your browser could not save this price. Check browser storage settings.", true);
-      return;
-    }
-    displayPrice(price, updatedAt);
-    $("silverPrice").value = "";
-    showStatus("Silver price updated and saved in this browser.");
-    $("currentPriceText").classList.add("pulse");
-    $("lastUpdatedTag").classList.add("glow");
-    setTimeout(() => {
-      $("currentPriceText").classList.remove("pulse");
-      $("lastUpdatedTag").classList.remove("glow");
-    }, 800);
-    if (Number($("weight").value) > 0) calculate(false);
-  }
-  function autoCalculate() {
-    const weight = Number($("weight").value);
-    if (!Number.isFinite(weight) || weight <= 0) {
-      $("result").style.display = "none";
-      return;
-    }
-    calculate(false);
-  }
-  function calculate(shouldScroll = true) {
-    const weight = Number($("weight").value);
-    if (!Number.isFinite(weight) || weight <= 0) {
-      showStatus("Enter a weight greater than zero.", true);
-      $("result").style.display = "none";
-      return;
-    }
-    const pricePerGram = Number($("currentPriceText").textContent.replace(/[^\d.]/g, ""));
-    if (!Number.isFinite(pricePerGram) || pricePerGram <= 0) {
-      showStatus("Please set the silver price first.", true);
-      return;
-    }
-    const base = pricePerGram * weight;
-    let minMaking;
-    let maxMaking;
-    if (weight < 8) {
-      minMaking = maxMaking = 65;
-    } else if (weight < 10) {
-      minMaking = maxMaking = 25;
-    } else if (weight >= 10 && weight <= 29) {
-      minMaking = 500;
-      maxMaking = 600;
-    } else if (weight < 30) {
-      minMaking = maxMaking = 500;
-    } else if (weight < 40) {
-      minMaking = maxMaking = weight * 20;
-    } else if (weight < 50) {
-      minMaking = maxMaking = weight * 18;
-    } else if (weight < 70) {
-      minMaking = maxMaking = weight * 15;
-    } else {
-      minMaking = maxMaking = weight * 12;
-    }
-    $("result").style.display = "block";
-    $("totalText").textContent = "Breakdown";
-    $("basePrice").textContent = formatINR(base);
-    $("makingCharge").textContent = minMaking === maxMaking
-      ? formatINR(minMaking)
-      : formatINR(minMaking) + " – " + formatINR(maxMaking);
-    $("finalAmount").textContent = minMaking === maxMaking
-      ? formatINR(base + minMaking)
-      : formatINR(base + minMaking) + " – " + formatINR(base + maxMaking);
-    showStatus("");
-    if (shouldScroll) $("result").scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-  loadTheme();
-  loadPrice();
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
