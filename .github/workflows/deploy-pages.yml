@@ -2,7 +2,7 @@ name: Deploy Silver Calculator to GitHub Pages
 
 on:
   push:
-    branches: ["master"]
+    branches: ["github-pages-static"]
     paths:
       - "site/**"
       - ".github/workflows/deploy-pages.yml"
