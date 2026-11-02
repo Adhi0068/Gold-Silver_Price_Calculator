@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>AD's Gold &amp; Silver Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-title" id="topMetalTitle">Silver</div>
+    <div class="mode-switch" onclick="toggleTheme()"></div>
+  </div>
+
+  <!-- MAIN CARD -->
+  <div class="card">
+
+    <div class="current-price-box">
+      <div class="label" id="priceLabel">Currently Set Silver Price</div>
+      <div class="price" id="currentPriceText">₹ -- / gram</div>
+
+      <div class="tag" id="lastUpdatedTag" style="display:none">
+        <span id="updatedText"></span>
+      </div>
+    </div>
+
+    <!-- UPDATE SECTION -->
+    <label id="updateLabel">Update Silver Price</label>
+
+    <!-- SILVER -->
+    <div class="row" id="silverPriceRow">
+      <input id="silverPriceInput"
+             type="number"
+             placeholder="Price"
+             min="0"
+             step="0.01"
+             oninput="sanitizeInput(this)">
+      <button onclick="updatePriceOnly()">Update</button>
+    </div>
+
+    <!-- GOLD -->
+    <div class="gold-grid" id="goldGrid">
+
+      <div class="gold-column">
+        <label>Update Price</label>
+        <div class="gold-box">
+            <input id="goldPriceInput"
+                  type="number"
+                  placeholder="Price"
+                  min="0"
+                  step="0.01">
+            <button onclick="updateGoldPrice()">Update</button>
+        </div>
+      </div>
+
+      <div class="gold-column">
+        <label>Update Rate %</label>
+        <div class="gold-box">
+            <input id="goldRateInput"
+                  type="number"
+                  placeholder="Rate %"
+                  min="0"
+                  step="0.01">
+            <button onclick="updateGoldRate()">Update</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- WEIGHT (NOW INSIDE CARD PROPERLY) -->
+    <label>Weight (grams)</label>
+    <div class="row">
+      <input id="weight"
+             type="number"
+             min="0"
+             step="0.01"
+             oninput="sanitizeInput(this); autoCalculate()">
+      <button onclick="calculate()">Calculate</button>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result" id="result">
+      <div id="totalText"></div>
+
+      <div class="breakdown-row">
+        <span id="baseLabel">Base Price</span>
+        <span>₹ <span id="basePrice"></span></span>
+      </div>
+
+      <div class="breakdown-row">
+        <span id="makingLabel">Making Charges</span>
+        <span>₹ <span id="makingCharge"></span></span>
+      </div>
+
+      <div class="summary">
+        FINAL PAYABLE AMOUNT
+        <div class="amount">₹ <span id="finalAmount"></span></div>
+      </div>
+    </div>
+
+  </div> <!-- CARD CLOSED HERE (correct place) -->
+
+</div>
+
+<!-- METAL SWITCH -->
+<div class="metal-switch">
+  <div class="metal-option" onclick="switchMetal('silver')">Silver</div>
+  <div class="metal-option" onclick="switchMetal('gold')">Gold</div>
+  <div class="metal-slider"></div>
+</div>
+
+
+<footer style="
+  margin: 24px auto 18px;
+  padding: 0 16px;
+  text-align: center;
+  color: var(--text); opacity: 0.65;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+">
+  An idea by <strong style="color: inherit;">AD</strong>, brought to life with AI ❤️
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
