@@ -30,9 +30,9 @@ Open `site/index.html` in a browser. No build tools or Java installation are nee
 
 1. Open the repository **Settings → Pages**.
 2. Under **Build and deployment**, select **GitHub Actions** as the source.
-3. Push changes to the `master` branch. The workflow at `.github/workflows/deploy-pages.yml` publishes the `site/` directory.
+3. Push changes to the `github-pages-static` branch. The workflow at `.github/workflows/deploy-pages.yml` publishes the `site/` directory.
 4. When the workflow finishes, the website will be available at:
 
    https://adhi0068.github.io/Silver_Price_Calculator/
 
-The original Spring Boot/Maven source remains in the repository under `src/`; the GitHub Pages version is the independent static site in `site/`.
+The `master` branch is reserved for the original Java/Spring Boot project. The `github-pages-static` branch contains the converted HTML, CSS and JavaScript version; its workflow deploys only the `site/` directory to GitHub Pages.
